@@ -1,0 +1,119 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders without crashing 1`] = `
+Array [
+  <nav
+    className="navbar navbar-expand fixed-top navbar-dark bg-warning"
+  >
+    <div
+      className="collapse navbar-collapse"
+      id="navbarsExample02"
+    >
+      <ul
+        className="navbar-nav ml-auto"
+      >
+        <li
+          className="nav-item"
+        >
+          <a
+            className="nav-link"
+            href="/"
+            onClick={[Function]}
+          >
+            Home
+          </a>
+        </li>
+        <li
+          className="nav-item"
+        >
+          <a
+            className="nav-link"
+            href="/favourite"
+            onClick={[Function]}
+          >
+            Favourite
+          </a>
+        </li>
+      </ul>
+    </div>
+  </nav>,
+  <header
+    className="justify-content-center py-2 bg-warning text-center text-white"
+  >
+    <div
+      className="container"
+    >
+      <div
+        className="row"
+      >
+        <div
+          className="col"
+        >
+          <h1
+            className="font-weight-bold"
+          >
+            The Beer Bank
+          </h1>
+          <p>
+            Find your favourite beer here
+          </p>
+        </div>
+      </div>
+      <div
+        className="row justify-content-center"
+      >
+        <form
+          className="col-md-6 col-sm-12"
+        >
+          <div
+            className="form-group"
+          >
+            <input
+              className="form-control"
+              onInput={[Function]}
+              placeholder="Search for beer name"
+              type="text"
+            />
+          </div>
+        </form>
+      </div>
+    </div>
+  </header>,
+  <div
+    className="container"
+  >
+    <div
+      className="row row-eq-height py-5"
+    >
+      <div
+        className="col my-5 text-center"
+      />
+    </div>
+  </div>,
+  <div>
+    <div
+      aria-hidden={true}
+      className="modal fade bd-example-modal-lg"
+      onClick={[Function]}
+      role="dialog"
+      style={
+        Object {
+          "display": "none",
+          "zIndex": 1041,
+        }
+      }
+      tabIndex="-1"
+    >
+      <div
+        className="modal-dialog modal-lg"
+        onClick={[Function]}
+        role="document"
+      >
+        <div
+          className="modal-content"
+        />
+      </div>
+    </div>
+  </div>,
+]
+`;

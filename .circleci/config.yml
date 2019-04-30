@@ -1,0 +1,85 @@
+default: &defaults
+  docker:
+  - image: circleci/node:8.9
+  working_directory: ~/repo
+
+gcloud_auth: &gcloud_auth
+  run:
+    name: setup gcloud
+    command: |
+      bash ~/repo/.circleci/bin/setup_gcloud.sh
+
+version: 2
+jobs:
+  test:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "package.json" }}
+          - v1-dependencies-
+      - run:
+          name: Installing Packages
+          command: npm install
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+      - run:
+         name: Running Tests with Coverage
+         command: npm test
+
+  build:
+    <<: *defaults
+    steps:
+      - checkout
+      - *gcloud_auth
+      - setup_remote_docker:
+          ocker_layer_caching: true
+      - run:
+          name: Installing Packages
+          command: npm install
+      - run:
+          name: Build Application
+          command: npm run build
+      - run:
+          name: Build Docker Image
+          command: |
+            bash ~/repo/.circleci/bin/build_docker_image.sh
+  
+  
+  deploy-job:
+    docker:
+      - image: ${DEPLOYMENT_IMAGE}
+        auth:
+          username: _json_key
+          password: ${GOOGLE_CREDS}
+        environment:
+          GOOGLE_APPLICATION_CREDENTIALS: ${HOME}/google-service-key.json
+    steps:
+      - checkout
+      - run:
+          name: setup gcloud
+          command: |
+            touch google-service-key.json
+            echo $GOOGLE_CREDENTIALS | base64 --decode >> ./google-service-key.json
+            gcloud auth activate-service-account --key-file google-service-key.json
+            gcloud --quiet config set project ${GOOGLE_PROJECT_ID}
+            gcloud --quiet config set compute/zone ${GOOGLE_COMPUTE_ZONE}
+      - run:
+          name: Deploy to kubernetes
+          command: |
+            . .circleci/bin/deploy_to_k8s.sh
+
+workflows:
+  version: 2
+  build-then-deploy:
+    jobs:
+      - test
+      - build:
+          requires:
+            - test
+      - deploy-job:
+          requires:
+            - build
